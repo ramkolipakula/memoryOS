@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class MemorySearchServiceImpl implements MemorySearchService {
 
-    private final MemoryRepository memoryRepository;
+    private final MemorySearchStrategy searchStrategy;
     private final GroqService groqService;
 
     public MemorySearchServiceImpl(
-            MemoryRepository memoryRepository,
+            MemorySearchStrategy searchStrategy,
             GroqService groqService) {
-        this.memoryRepository = memoryRepository;
+        this.searchStrategy = searchStrategy;
         this.groqService = groqService;
     }
 
@@ -34,21 +34,9 @@ public class MemorySearchServiceImpl implements MemorySearchService {
 
         log.info("Searching memories for query: '{}'", query);
 
-        // Tokenize query and search across multiple keywords
-        Set<Memory> matchedMemories = new LinkedHashSet<>();
-        String[] keywords = extractKeywords(query);
-
-        for (String keyword : keywords) {
-            if (keyword.length() >= 2) {
-                List<Memory> results = memoryRepository.findTop20ByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(keyword, keyword);
-                matchedMemories.addAll(results);
-            }
-        }
-
-        // Also search with the full query
-        matchedMemories.addAll(memoryRepository.findTop20ByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(query, query));
-
-        List<Memory> memoryList = new ArrayList<>(matchedMemories);
+        long startTime = System.currentTimeMillis();
+        List<Memory> memoryList = searchStrategy.executeSearch(query);
+        long searchLatencyMs = System.currentTimeMillis() - startTime;
         List<MemoryResponse> memoryResponses = MemoryMapper.toResponseList(memoryList);
 
         log.info("========== MEMORY RETRIEVAL ==========");
@@ -68,21 +56,7 @@ public class MemorySearchServiceImpl implements MemorySearchService {
                 .build();
     }
 
-    private String[] extractKeywords(String query) {
-        // Remove common stop words and extract meaningful keywords
-        Set<String> stopWords = Set.of(
-                "what", "when", "where", "who", "how", "is", "are", "was",
-                "were", "the", "a", "an", "in", "on", "at", "to", "for",
-                "of", "with", "by", "from", "my", "your", "our", "their",
-                "this", "that", "it", "do", "does", "did", "has", "have",
-                "had", "will", "would", "can", "could", "should", "may"
-        );
 
-        return Arrays.stream(query.toLowerCase().split("\\s+"))
-                .map(w -> w.replaceAll("[^a-zA-Z0-9]", ""))
-                .filter(w -> !w.isEmpty() && !stopWords.contains(w))
-                .toArray(String[]::new);
-    }
 
     private String generateAnswer(String query, List<Memory> memories) {
         if (memories.isEmpty()) {

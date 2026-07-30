@@ -1,19 +1,18 @@
 package com.memoryos.service;
 
-import com.memoryos.dto.EventDto;
-
-import java.util.List;
+import com.memoryos.dto.ExtractionResponse;
 
 /**
- * Service for extracting structured events from a transcript using Azure OpenAI.
+ * Service responsible for passing transcripts to an LLM
+ * to extract structured events.
  */
 public interface EventExtractionService {
 
     /**
-     * Extracts structured events from a transcript.
+     * Extracts events from the given text transcript.
      *
      * @param transcript the text transcript to analyze
-     * @return a list of extracted events
+     * @return an ExtractionResponse
      */
-    List<EventDto> extractEvents(String transcript);
+    ExtractionResponse extractEvents(String transcript);
 }

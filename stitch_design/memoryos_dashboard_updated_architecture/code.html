@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MemoryOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#303033",
+                        "on-tertiary": "#003915",
+                        "secondary-container": "#47464a",
+                        "on-secondary-fixed-variant": "#47464a",
+                        "tertiary-container": "#007e37",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-surface": "#e5e1e4",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#4ae176",
+                        "surface-variant": "#353437",
+                        "inverse-primary": "#0053db",
+                        "on-primary-container": "#eeefff",
+                        "on-surface-variant": "#c3c6d7",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#131315",
+                        "tertiary-fixed": "#6bff8f",
+                        "primary": "#b4c5ff",
+                        "on-tertiary-fixed-variant": "#005321",
+                        "surface-container-highest": "#353437",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#1b1b1e",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary": "#002a78",
+                        "on-tertiary-fixed": "#002109",
+                        "secondary-fixed": "#e4e1e6",
+                        "surface-bright": "#39393b",
+                        "on-secondary-container": "#b6b4b8",
+                        "surface-container-high": "#2a2a2c",
+                        "secondary": "#c8c5ca",
+                        "inverse-on-surface": "#313032",
+                        "on-tertiary-container": "#c1ffc5",
+                        "background": "#131315",
+                        "outline-variant": "#434655",
+                        "surface-container": "#201f22",
+                        "surface-tint": "#b4c5ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-background": "#e5e1e4",
+                        "secondary-fixed-dim": "#c8c5ca",
+                        "surface": "#131315",
+                        "inverse-surface": "#e5e1e4",
+                        "surface-container-lowest": "#0e0e10",
+                        "primary-container": "#2563eb",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary": "#4ae176",
+                        "surface-container-low": "#1c1b1d",
+                        "outline": "#8d90a0",
+                        "error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "20px",
+                        "md": "16px",
+                        "xl": "48px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "lg": "24px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "display": ["Geist"],
+                        "body-md": ["Geist"],
+                        "mono-sm": ["jetbrainsMono"],
+                        "headline-lg-mobile": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "mono-sm": ["12px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Pulse Animation for running state */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        .running-glow {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-safe">
+<!-- TopAppBar -->
+<header class="bg-background border-b border-outline-variant bg-background/80 backdrop-blur-md fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16">
+<div class="flex items-center gap-2 text-primary hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">memory</span>
+</div>
+<div class="font-display text-headline-md-mobile text-primary tracking-tighter">
+            MemoryOS
+        </div>
+<div class="flex items-center gap-2 text-primary hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">sensors</span>
+</div>
+</header>
+<main class="pt-[80px] pb-[90px] px-gutter flex flex-col gap-lg max-w-container-max mx-auto">
+<!-- Header Section -->
+<section class="flex flex-col items-center text-center gap-sm pt-4">
+<h1 class="font-display text-display text-on-surface tracking-tighter">MemoryOS</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">AI-Powered Long-Term Memory Operating System</p>
+</section>
+<!-- Horizontal Pipeline -->
+<section class="bg-surface-container rounded-xl border border-outline-variant p-md flex flex-col gap-md overflow-hidden">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">Pipeline Lifecycle</h2>
+<span class="font-mono-sm text-mono-sm text-primary px-2 py-1 bg-primary/10 rounded-full border border-primary/20">Active</span>
+</div>
+<div class="relative flex justify-between items-center mt-2 px-2">
+<!-- Horizontal connecting line -->
+<div class="absolute left-6 right-6 top-4 h-[1px] bg-outline-variant z-0"></div>
+<!-- Listen -->
+<div class="flex flex-col items-center gap-xs z-10 w-16">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center border border-tertiary">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">check</span>
+</div>
+<span class="font-label-md text-label-md text-tertiary">Listen</span>
+</div>
+<!-- Understand -->
+<div class="flex flex-col items-center gap-xs z-10 w-16">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center border border-primary running-glow">
+<span class="material-symbols-outlined text-[16px] text-on-primary-container animate-spin" style="font-variation-settings: 'FILL' 1;">sync</span>
+</div>
+<span class="font-label-md text-label-md text-primary">Understand</span>
+</div>
+<!-- Reason -->
+<div class="flex flex-col items-center gap-xs z-10 w-16">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">psychology</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Reason</span>
+</div>
+<!-- Remember -->
+<div class="flex flex-col items-center gap-xs z-10 w-16">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">database</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Remember</span>
+</div>
+<!-- Recall -->
+<div class="flex flex-col items-center gap-xs z-10 w-16">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">search</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Recall</span>
+</div>
+</div>
+</section>
+<!-- Overall Statistics -->
+<section class="grid grid-cols-2 md:grid-cols-3 gap-sm">
+<div class="bg-surface-container rounded-lg border border-outline-variant p-sm flex flex-col gap-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Audio</span>
+<span class="font-headline-md text-headline-md text-on-surface">32 min</span>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-sm flex flex-col gap-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Chunks</span>
+<span class="font-headline-md text-headline-md text-on-surface">14</span>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-sm flex flex-col gap-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Events</span>
+<span class="font-headline-md text-headline-md text-on-surface">96</span>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-sm flex flex-col gap-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Remembered</span>
+<span class="font-headline-md text-headline-md text-tertiary">41</span>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-sm flex flex-col gap-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Forgotten</span>
+<span class="font-headline-md text-headline-md text-outline">55</span>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-sm flex flex-col gap-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Pipeline Time</span>
+<span class="font-headline-md text-headline-md text-primary">52 sec</span>
+</div>
+</section>
+<!-- Primary Buttons -->
+<section class="flex flex-col md:flex-row gap-sm">
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+    Continue Processing
+  </button>
+<button class="flex-1 bg-surface-container border border-outline-variant text-primary font-label-md text-label-md py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+    Upload New Audio
+  </button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest border-t border-outline-variant bg-surface-container-lowest/90 backdrop-blur-xl shadow-lg fixed bottom-0 left-0 w-full z-50 flex justify-between items-center pt-2 pb-safe px-2 md:hidden rounded-t-xl overflow-x-auto gap-2">
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-2 py-1 min-w-[64px]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-[10px] mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors min-w-[64px]" href="#">
+<span class="material-symbols-outlined">mic</span>
+<span class="font-label-md text-[10px] mt-1">Listen</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors min-w-[64px]" href="#">
+<span class="material-symbols-outlined">sync</span>
+<span class="font-label-md text-[10px] mt-1">Understand</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors min-w-[64px]" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md text-[10px] mt-1">Reason</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors min-w-[64px]" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-md text-[10px] mt-1">Remember</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors min-w-[64px]" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-md text-[10px] mt-1">Recall</span>
+</a>
+</nav>
+</body></html>

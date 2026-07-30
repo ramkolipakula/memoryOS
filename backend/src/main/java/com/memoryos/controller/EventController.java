@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.memoryos.dto.ExtractionResponse;
 import java.util.List;
 
 @Slf4j
@@ -20,9 +21,9 @@ public class EventController {
     private final EventExtractionService eventExtractionService;
 
     @PostMapping("/extract")
-    public ResponseEntity<List<EventDto>> extractEvents(@Valid @RequestBody ExtractRequest request) {
+    public ResponseEntity<ExtractionResponse> extractEvents(@Valid @RequestBody ExtractRequest request) {
         log.info("Extracting events from transcript ({} characters)", request.getTranscript().length());
-        List<EventDto> events = eventExtractionService.extractEvents(request.getTranscript());
-        return ResponseEntity.ok(events);
+        ExtractionResponse response = eventExtractionService.extractEvents(request.getTranscript());
+        return ResponseEntity.ok(response);
     }
 }

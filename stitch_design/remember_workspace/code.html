@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MemoryOS - Remember</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#eeefff",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "inverse-primary": "#0053db",
+                      "tertiary": "#4ae176",
+                      "on-error-container": "#ffdad6",
+                      "surface-variant": "#353437",
+                      "surface": "#131315",
+                      "surface-container-lowest": "#0e0e10",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-primary-fixed": "#00174b",
+                      "on-primary": "#002a78",
+                      "primary-fixed": "#dbe1ff",
+                      "on-secondary-fixed-variant": "#47464a",
+                      "secondary-container": "#47464a",
+                      "surface-container-low": "#1c1b1d",
+                      "surface-bright": "#39393b",
+                      "surface-container-highest": "#353437",
+                      "primary": "#b4c5ff",
+                      "on-secondary-fixed": "#1b1b1e",
+                      "tertiary-fixed-dim": "#4ae176",
+                      "on-tertiary": "#003915",
+                      "primary-container": "#2563eb",
+                      "on-secondary-container": "#b6b4b8",
+                      "inverse-on-surface": "#313032",
+                      "surface-container": "#201f22",
+                      "tertiary-fixed": "#6bff8f",
+                      "secondary-fixed": "#e4e1e6",
+                      "on-background": "#e5e1e4",
+                      "tertiary-container": "#007e37",
+                      "outline-variant": "#434655",
+                      "on-tertiary-container": "#c1ffc5",
+                      "on-tertiary-fixed": "#002109",
+                      "surface-container-high": "#2a2a2c",
+                      "error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#005321",
+                      "on-surface": "#e5e1e4",
+                      "on-secondary": "#303033",
+                      "outline": "#8d90a0",
+                      "on-surface-variant": "#c3c6d7",
+                      "secondary": "#c8c5ca",
+                      "inverse-surface": "#e5e1e4",
+                      "background": "#131315",
+                      "surface-tint": "#b4c5ff",
+                      "on-error": "#690005",
+                      "surface-dim": "#131315",
+                      "secondary-fixed-dim": "#c8c5ca",
+                      "error": "#ffb4ab"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "lg": "24px",
+                      "unit": "4px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "xl": "48px",
+                      "sm": "8px",
+                      "gutter": "20px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "headline-lg-mobile": [
+                              "Geist"
+                      ],
+                      "mono-sm": [
+                              "jetbrainsMono"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "display": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.03em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for trace logs if needed */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #353437;
+            border-radius: 10px;
+        }
+        .glass-panel {
+            background: rgba(28, 27, 29, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid #434655;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 border-b border-outline-variant bg-background/80 backdrop-blur-md">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-variant transition-colors text-primary dark:text-primary">
+<span class="material-symbols-outlined text-2xl">memory</span>
+</button>
+<div class="font-display text-headline-md-mobile text-primary tracking-tighter">MemoryOS</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-variant transition-colors text-primary dark:text-primary">
+<span class="material-symbols-outlined text-2xl">sensors</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-20 pb-28 px-4 md:px-gutter max-w-container-max mx-auto w-full flex flex-col gap-6">
+<!-- Header Section -->
+<div class="flex flex-col gap-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Long-Term Storage</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Archived cognitive traces and extracted entities.</p>
+</div>
+<!-- Abstract Visualization Header (Premium Touch) -->
+<div class="w-full h-32 rounded-xl border border-outline-variant relative overflow-hidden flex items-center justify-center" data-alt="A highly abstract, dark-mode visualization of a neural network data structure. Glowing blue and green nodes connected by thin, precise lines floating in a deep black void space. Minimalist, technical, high-fidelity developer tool aesthetic. Soft, diffused bloom effects on the nodes." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAVBYy5zWRSznMDwNGlT4zbZAQhAW5-8p5VvntNnQxpcqymXv-feEFa7vm_HUOJtfYuJhGAGvDsshGxQI-zQLSplI1_QcyYnRsf6n7Aj6JgphgPpZbCMW-xJOSqogDhyZOb3DTSaBhizzqeINiTUyeCpM6k8D0oyc6G69E33pV9voAEp1KGCe_8icAx2tOIKI7lASkPLPpRYtAxdJNfe2gg8zQmlAc9OY9AAyHMJIY6ZSZ32-Q8mmTd_A')">
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10"></div>
+<div class="z-20 text-center">
+<div class="font-mono-sm text-mono-sm text-primary/70 mb-1">SYSTEM_STATUS: HEALTHY</div>
+<div class="font-display text-display text-on-surface">98.4<span class="text-headline-md font-headline-md text-on-surface-variant">%</span></div>
+</div>
+</div>
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Total Memories -->
+<div class="col-span-2 glass-panel rounded-xl p-5 flex flex-col justify-between">
+<div class="flex items-center gap-2 mb-4 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">database</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Total Indexed</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg text-on-surface">14,293</div>
+<div class="font-body-md text-body-md text-tertiary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +342 this week
+                    </div>
+</div>
+</div>
+<!-- Categories Breakdown -->
+<div class="col-span-1 glass-panel rounded-xl p-4 flex flex-col gap-3">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Domains</span>
+<div class="space-y-3 mt-auto">
+<div class="flex items-center justify-between text-sm">
+<span class="font-body-md text-body-md text-on-surface flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-primary-container"></div> Work</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">45%</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="font-body-md text-body-md text-on-surface flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-tertiary-container"></div> Academic</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">30%</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="font-body-md text-body-md text-on-surface flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-surface-variant"></div> Personal</span>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">25%</span>
+</div>
+</div>
+</div>
+<!-- Importance Distribution -->
+<div class="col-span-1 glass-panel rounded-xl p-4 flex flex-col gap-3">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Priority</span>
+<div class="space-y-3 mt-auto w-full">
+<div>
+<div class="flex justify-between font-mono-sm text-mono-sm mb-1">
+<span class="text-error">High</span>
+<span class="text-on-surface-variant">12%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-1"><div class="bg-error h-1 rounded-full" style="width: 12%"></div></div>
+</div>
+<div>
+<div class="flex justify-between font-mono-sm text-mono-sm mb-1">
+<span class="text-tertiary">Med</span>
+<span class="text-on-surface-variant">68%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-1"><div class="bg-tertiary h-1 rounded-full" style="width: 68%"></div></div>
+</div>
+<div>
+<div class="flex justify-between font-mono-sm text-mono-sm mb-1">
+<span class="text-on-surface-variant">Low</span>
+<span class="text-on-surface-variant">20%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-1"><div class="bg-surface-variant h-1 rounded-full" style="width: 20%"></div></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Memories (Event Card Style) -->
+<div class="mt-4">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface">Recent Extractions</h2>
+<button class="font-label-md text-label-md text-primary hover:text-primary-fixed transition-colors">View All</button>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Memory Card 1 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 hover:border-primary-container/50 transition-colors group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">science</span>
+<span class="font-label-md text-label-md text-tertiary bg-tertiary-container/10 px-2 py-0.5 rounded uppercase">Academic</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">10 mins ago</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-medium mb-1 group-hover:text-primary transition-colors">Quantum computing decoherence mitigation strategies</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Extracted key methodologies for error correction relying on topological surface codes discussed in recent literature.</p>
+</div>
+<!-- Memory Card 2 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 hover:border-primary-container/50 transition-colors group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">work</span>
+<span class="font-label-md text-label-md text-primary bg-primary-container/10 px-2 py-0.5 rounded uppercase">Work</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">2 hours ago</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-medium mb-1 group-hover:text-primary transition-colors">Q3 Roadmapping Session Notes</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Agreed on shifting priority to the core tracing engine. Dependency on infrastructure team for isolated environments acknowledged.</p>
+<div class="mt-3 flex gap-2">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant bg-surface-container-highest border border-outline-variant px-2 py-0.5 rounded-full flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-error"></div> High Priority</span>
+</div>
+</div>
+<!-- Memory Card 3 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 hover:border-primary-container/50 transition-colors group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">person</span>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-variant/30 px-2 py-0.5 rounded uppercase">Personal</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">Yesterday</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-medium mb-1 group-hover:text-primary transition-colors">Book Recommendation: 'The Glass Cage'</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Suggested by Sarah during lunch. Focuses on automation and its impact on human cognition and agency.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (from JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center pt-2 pb-safe px-2 border-t border-outline-variant bg-surface-container-lowest/90 backdrop-blur-xl h-[72px] rounded-t-xl shadow-lg md:hidden">
+<!-- Inactive: Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary w-16 h-full gap-1" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-md text-[10px]">Dashboard</span>
+</a>
+<!-- Inactive: Pipeline -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary w-16 h-full gap-1" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0;">account_tree</span>
+<span class="font-label-md text-[10px]">Pipeline</span>
+</a>
+<!-- Active: Memories -->
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-3 py-1 w-16 h-[56px] gap-1 scale-90 duration-150 relative -top-1" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="font-label-md text-[10px] font-bold text-primary">Memories</span>
+</a>
+<!-- Inactive: Search -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary w-16 h-full gap-1" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0;">search</span>
+<span class="font-label-md text-[10px]">Search</span>
+</a>
+<!-- Inactive: Settings -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary w-16 h-full gap-1" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-[10px]">Settings</span>
+</a>
+</nav>
+<!-- Support structure to fake 'pb-safe' for browsers that don't support it in tailwind yet -->
+<div class="h-safe-area-bottom w-full fixed bottom-0 bg-surface-container-lowest z-40 md:hidden block"></div>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .h-safe-area-bottom { height: env(safe-area-inset-bottom); }
+    </style>
+</body></html>

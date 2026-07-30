@@ -65,15 +65,11 @@ export default function AudioUpload({ onUploadStart, uploadProgress, isUploading
   };
 
   return (
-    <div className="glass-card p-6 animate-slide-up" id="audio-upload-section">
-      <h2 className="section-title">
-        <span className="text-2xl">🎵</span>
-        Upload Audio
-      </h2>
-
-      {/* Drop Zone */}
-      <div
-        className={`upload-zone ${dragOver ? 'drag-over' : ''}`}
+    <div className="flex flex-col gap-lg">
+      <section 
+        className={`bg-surface-container-low rounded-xl border border-dashed p-xl flex flex-col items-center justify-center gap-md cursor-pointer transition-colors min-h-[240px]
+          ${dragOver ? 'border-primary bg-surface-container' : 'border-outline hover:bg-surface-container'}
+        `}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
@@ -89,81 +85,67 @@ export default function AudioUpload({ onUploadStart, uploadProgress, isUploading
             if (file) handleFile(file);
           }}
           disabled={disabled}
-          id="audio-file-input"
         />
-
-        <div className={`animate-float ${dragOver ? 'scale-110' : ''} transition-transform`}>
-          <svg className="w-16 h-16 mx-auto mb-4 text-neural-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-          </svg>
+        <span className={`material-symbols-outlined text-[48px] ${dragOver ? 'text-primary' : 'text-primary'}`}>
+          {dragOver ? 'cloud_upload' : 'mic'}
+        </span>
+        <div className="text-center">
+          <h3 className="font-headline-md text-headline-md text-on-surface">
+            {dragOver ? 'Drop Audio Here' : 'Upload Audio'}
+          </h3>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-xs">
+            Drag and drop audio files or click to browse
+          </p>
+          <p className="font-mono-sm text-mono-sm text-outline mt-2">
+            MP3, WAV, M4A, OGG • Max 50MB
+          </p>
         </div>
+      </section>
 
-        <p className="text-neural-200 font-medium mb-2">
-          {dragOver ? 'Drop your audio file here' : 'Drag & drop your audio file here'}
-        </p>
-        <p className="text-neural-400 text-sm">
-          or <span className="text-synapse-400 font-semibold cursor-pointer hover:underline">browse files</span>
-        </p>
-        <p className="text-neural-500 text-xs mt-3">
-          Supports MP3, WAV, M4A, OGG, FLAC, WebM • Max 50MB
-        </p>
-      </div>
-
-      {/* Error Message */}
       {error && (
-        <div className="mt-4 p-3 bg-forget-500/10 border border-forget-500/30 rounded-xl text-forget-400 text-sm">
-          ⚠️ {error}
+        <div className="p-sm bg-error-container/20 border border-error/50 rounded-lg text-error flex gap-2 items-center">
+          <span className="material-symbols-outlined text-[18px]">error</span>
+          <span className="font-body-md text-body-md">{error}</span>
         </div>
       )}
 
-      {/* Selected File Info */}
       {selectedFile && !error && (
-        <div className="mt-5 animate-slide-up">
-          <div className="flex items-center gap-4 p-4 bg-neural-700/50 rounded-xl border border-neural-500/30">
-            <div className="w-12 h-12 bg-synapse-500/15 rounded-xl flex items-center justify-center">
-              <span className="text-xl">🎧</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-neural-100 font-medium truncate">{selectedFile.name}</p>
-              <p className="text-neural-400 text-sm">{formatFileSize(selectedFile.size)}</p>
+        <div className="bg-surface-container rounded-lg border border-outline-variant p-md flex flex-col gap-md animate-slide-up">
+          <div className="flex items-center gap-sm justify-between">
+            <div className="flex items-center gap-sm">
+              <span className="material-symbols-outlined text-primary text-[24px]">audio_file</span>
+              <div>
+                <p className="font-headline-md text-headline-md text-on-surface">{selectedFile.name}</p>
+                <p className="font-mono-sm text-mono-sm text-on-surface-variant">{formatFileSize(selectedFile.size)}</p>
+              </div>
             </div>
             {!isUploading && (
-              <button
-                className="btn-primary"
-                onClick={handleUpload}
+              <button 
+                onClick={handleUpload} 
                 disabled={disabled}
-                id="upload-button"
+                className="bg-primary text-on-primary font-label-md text-label-md py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
               >
+                <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
                 Upload & Transcribe
               </button>
             )}
           </div>
 
-          {/* Audio Preview */}
           {audioUrl && (
-            <div className="mt-4">
-              <audio
-                controls
-                src={audioUrl}
-                className="w-full rounded-lg"
-                style={{ height: '40px' }}
-                id="audio-preview"
-              />
-            </div>
+            <audio controls src={audioUrl} className="w-full h-10 mt-2 opacity-80" />
           )}
 
-          {/* Upload Progress */}
           {isUploading && (
-            <div className="mt-4">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-neural-300">Uploading & Transcribing...</span>
-                <span className="text-synapse-400 font-semibold">{uploadProgress}%</span>
+            <div className="flex flex-col gap-xs mt-2">
+              <div className="flex justify-between items-center">
+                <span className="font-mono-sm text-mono-sm text-on-surface-variant">Uploading & Transcribing...</span>
+                <span className="font-mono-sm text-mono-sm text-primary">{uploadProgress}%</span>
               </div>
-              <div className="progress-bar">
-                <div
-                  className="progress-bar-fill"
+              <div className="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-primary transition-all duration-300" 
                   style={{ width: `${uploadProgress}%` }}
-                />
+                ></div>
               </div>
             </div>
           )}

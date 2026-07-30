@@ -12,8 +12,14 @@ public class EventDto {
 
     @NotBlank(message = "Event type is required")
     private String type;
-
+    
     private String title;
 
     private String description;
+
+    private Integer chunkOrigin;
+
+    private Double confidence;
+
+    private Integer estimatedImportance;
 }

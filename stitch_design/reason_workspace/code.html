@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MemoryOS - Reason Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#303033",
+                        "on-tertiary": "#003915",
+                        "secondary-container": "#47464a",
+                        "on-secondary-fixed-variant": "#47464a",
+                        "tertiary-container": "#007e37",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-surface": "#e5e1e4",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#4ae176",
+                        "surface-variant": "#353437",
+                        "inverse-primary": "#0053db",
+                        "on-primary-container": "#eeefff",
+                        "on-surface-variant": "#c3c6d7",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#131315",
+                        "tertiary-fixed": "#6bff8f",
+                        "primary": "#b4c5ff",
+                        "on-tertiary-fixed-variant": "#005321",
+                        "surface-container-highest": "#353437",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#1b1b1e",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary": "#002a78",
+                        "on-tertiary-fixed": "#002109",
+                        "secondary-fixed": "#e4e1e6",
+                        "surface-bright": "#39393b",
+                        "on-secondary-container": "#b6b4b8",
+                        "surface-container-high": "#2a2a2c",
+                        "secondary": "#c8c5ca",
+                        "inverse-on-surface": "#313032",
+                        "on-tertiary-container": "#c1ffc5",
+                        "background": "#131315",
+                        "outline-variant": "#434655",
+                        "surface-container": "#201f22",
+                        "surface-tint": "#b4c5ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-background": "#e5e1e4",
+                        "secondary-fixed-dim": "#c8c5ca",
+                        "surface": "#131315",
+                        "inverse-surface": "#e5e1e4",
+                        "surface-container-lowest": "#0e0e10",
+                        "primary-container": "#2563eb",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary": "#4ae176",
+                        "surface-container-low": "#1c1b1d",
+                        "outline": "#8d90a0",
+                        "error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "20px",
+                        "md": "16px",
+                        "xl": "48px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "lg": "24px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "display": ["Geist"],
+                        "body-md": ["Geist"],
+                        "mono-sm": ["jetbrainsMono"],
+                        "headline-lg-mobile": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "mono-sm": ["12px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Interactive reasoning expanding */
+        .reasoning-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out;
+        }
+        .reasoning-content.open {
+            grid-template-rows: 1fr;
+        }
+        .reasoning-inner {
+            overflow: hidden;
+        }
+        
+        /* Tag Colors */
+        .tag-academic { color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); background-color: rgba(96, 165, 250, 0.1); }
+        .tag-work { color: #4ade80; border-color: rgba(74, 222, 128, 0.3); background-color: rgba(74, 222, 128, 0.1); }
+        .tag-personal { color: #c084fc; border-color: rgba(192, 132, 252, 0.3); background-color: rgba(192, 132, 252, 0.1); }
+        .tag-noise { color: #f87171; border-color: rgba(248, 113, 113, 0.3); background-color: rgba(248, 113, 113, 0.1); }
+        
+        /* Tabs */
+        .tab-btn.active {
+            border-bottom-color: theme('colors.primary');
+            color: theme('colors.primary');
+        }
+        .tab-btn:not(.active) {
+            border-bottom-color: transparent;
+            color: theme('colors.on-surface-variant');
+        }
+        .tab-btn:not(.active):hover {
+            color: theme('colors.on-surface');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar (Mobile & Web) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-background dark:bg-background border-b border-outline-variant bg-background/80 backdrop-blur-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">memory</span>
+</button>
+<h1 class="font-display text-headline-md-mobile text-primary tracking-tighter">MemoryOS</h1>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">sensors</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow pt-24 px-gutter pb-safe max-w-container-max mx-auto w-full md:pl-[260px]">
+<div class="mb-6">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Decision Reasoning</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Reviewing algorithmic memory retention decisions.</p>
+</div>
+<!-- DecisionTabs -->
+<div class="flex border-b border-outline-variant mb-6">
+<button class="tab-btn active flex-1 pb-3 font-label-md text-label-md text-center border-b-2 transition-colors" onclick="switchTab('remember', this)">Remembered</button>
+<button class="tab-btn flex-1 pb-3 font-label-md text-label-md text-center border-b-2 transition-colors" onclick="switchTab('forget', this)">Forgotten</button>
+</div>
+<div class="space-y-6">
+<!-- Remember Tab Content -->
+<div class="space-y-4" id="tab-remember">
+<!-- Event 1: Academic -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md cursor-pointer hover:bg-surface-container transition-colors group" onclick="this.querySelector('.reasoning-content').classList.toggle('open')">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Research Paper Discussion</h3>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">14:32</span>
+</div>
+<div class="flex flex-wrap gap-2 mb-3">
+<span class="font-label-md text-label-md px-2 py-1 rounded-full border tag-academic">Academic</span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">priority_high</span> High
+                            </span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Retained
+                            </span>
+</div>
+<div class="font-mono-sm text-mono-sm text-outline mb-2">
+                            Ref: <span class="text-primary">chunk_0x8f2a</span>
+</div>
+<!-- Expandable Reasoning -->
+<div class="reasoning-content">
+<div class="reasoning-inner pt-3 border-t border-outline-variant mt-2">
+<div class="bg-black/50 rounded-lg p-3 border border-outline-variant/50">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span class="font-label-md text-label-md">Retention Reasoning</span>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant leading-relaxed">
+                                        Identified sustained discussion on 'attention mechanisms' with multiple citations. High density of technical vocabulary indicates core research focus. Confidence elevated due to cross-reference with active project files. Saved to Long-Term Memory.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="mt-2 flex justify-center text-outline-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Event 2: Work -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md cursor-pointer hover:bg-surface-container transition-colors group" onclick="this.querySelector('.reasoning-content').classList.toggle('open')">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Project Deadline Set</h3>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">09:15</span>
+</div>
+<div class="flex flex-wrap gap-2 mb-3">
+<span class="font-label-md text-label-md px-2 py-1 rounded-full border tag-work">Work</span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span> Mid
+                            </span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Retained
+                            </span>
+</div>
+<div class="font-mono-sm text-mono-sm text-outline mb-2">
+                            Ref: <span class="text-primary">chunk_0x3b1c</span>
+</div>
+<div class="reasoning-content">
+<div class="reasoning-inner pt-3 border-t border-outline-variant mt-2">
+<div class="bg-black/50 rounded-lg p-3 border border-outline-variant/50">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span class="font-label-md text-label-md">Retention Reasoning</span>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant leading-relaxed">
+                                        Temporal entity "Next Friday" mapped to hard deadline context. Keyword "deliverable" detected in proximity to action item assignments. Critical for upcoming scheduling context.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="mt-2 flex justify-center text-outline-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Forget Tab Content -->
+<div class="space-y-4 hidden" id="tab-forget">
+<!-- Event 3: Dropped -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md cursor-pointer hover:bg-surface-container transition-colors group" onclick="this.querySelector('.reasoning-content').classList.toggle('open')">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface line-through opacity-75">Coffee with Sarah</h3>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">Yesterday</span>
+</div>
+<div class="flex flex-wrap gap-2 mb-3">
+<span class="font-label-md text-label-md px-2 py-1 rounded-full border tag-personal opacity-75">Personal</span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-1 opacity-75">
+<span class="material-symbols-outlined text-[14px]">low_priority</span> Low
+                            </span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-error-container text-on-error-container border border-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">delete_sweep</span> Discarded
+                            </span>
+</div>
+<div class="font-mono-sm text-mono-sm text-outline mb-2">
+                            Ref: <span class="text-error">chunk_0x9a44</span>
+</div>
+<div class="reasoning-content">
+<div class="reasoning-inner pt-3 border-t border-outline-variant mt-2">
+<div class="bg-black/50 rounded-lg p-3 border border-error/50">
+<div class="flex items-center gap-2 mb-1 text-error">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span class="font-label-md text-label-md">Discard Reasoning</span>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant leading-relaxed">
+                                        Identified social engagement pattern. Recognized entity 'Sarah' linked to personal contact graph. However, conversation lacked novel informational value or actionable extraction points. Marked for pruning to optimize storage.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="mt-2 flex justify-center text-outline-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Event 4: Noise -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md cursor-pointer hover:bg-surface-container transition-colors group" onclick="this.querySelector('.reasoning-content').classList.toggle('open')">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface line-through opacity-75">Ambient Background Chatter</h3>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">08:30</span>
+</div>
+<div class="flex flex-wrap gap-2 mb-3">
+<span class="font-label-md text-label-md px-2 py-1 rounded-full border tag-noise opacity-75">Noise</span>
+<span class="font-label-md text-label-md px-2 py-1 rounded-full bg-error-container text-on-error-container border border-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">delete_sweep</span> Discarded
+                            </span>
+</div>
+<div class="font-mono-sm text-mono-sm text-outline mb-2">
+                            Ref: <span class="text-error">chunk_0x11b3</span>
+</div>
+<div class="reasoning-content">
+<div class="reasoning-inner pt-3 border-t border-outline-variant mt-2">
+<div class="bg-black/50 rounded-lg p-3 border border-error/50">
+<div class="flex items-center gap-2 mb-1 text-error">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span class="font-label-md text-label-md">Discard Reasoning</span>
+</div>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant leading-relaxed">
+                                        Audio trace analysis indicates low signal-to-noise ratio. Multiple overlapping non-contextual conversational fragments detected (café environment). Pruned immediately.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="mt-2 flex justify-center text-outline-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center pt-2 pb-safe px-2 bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant bg-surface-container-lowest/90 backdrop-blur-xl shadow-lg rounded-t-xl h-[72px]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined mb-1">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-3 py-1 scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-md text-label-md">Reasoning</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-label-md text-label-md">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<!-- NavigationDrawer (Web Only) -->
+<aside class="hidden md:flex fixed inset-y-0 left-0 z-[60] flex-col p-md h-full w-64 bg-surface-container dark:bg-surface-container border-r border-outline-variant shadow-xl">
+<div class="mb-8 px-2 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[28px]">memory</span>
+<span class="font-display text-primary text-headline-md tracking-tighter">MemoryOS</span>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md text-body-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-tertiary font-bold bg-tertiary-container/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-body-md text-body-md">Reasoning</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-body-md text-body-md">Search</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<script>
+    function switchTab(tabId, clickedElement) {
+        // Update tabs visibility
+        document.getElementById('tab-remember').classList.add('hidden');
+        document.getElementById('tab-forget').classList.add('hidden');
+        document.getElementById('tab-' + tabId).classList.remove('hidden');
+        
+        // Update tab buttons styling
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        clickedElement.classList.add('active');
+    }
+</script>
+</body></html>

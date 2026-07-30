@@ -9,6 +9,37 @@ export interface EventDto {
   type: string;
   title?: string;
   description: string;
+  chunkOrigin?: number;
+  confidence?: number;
+  estimatedImportance?: number;
+}
+
+export interface ChunkResult {
+  chunkId: number;
+  estimatedTokens: number;
+  eventCount: number;
+  status: string;
+  latencySec: number;
+  rawLlmResponse: string;
+  chunkContent: string;
+  events: EventDto[];
+}
+
+export interface ProcessMetrics {
+  speechSec: number;
+  chunkingMs: number;
+  mergeMs: number;
+  decisionMs: number;
+  databaseMs: number;
+  totalSec: number;
+  totalChunks: number;
+  duplicatesRemoved: number;
+}
+
+export interface ExtractionResponse {
+  chunkResults: ChunkResult[];
+  mergedEvents: EventDto[];
+  metrics: ProcessMetrics;
 }
 
 export interface MemoryDecisionDto {
@@ -52,9 +83,12 @@ export interface SearchResponse {
 
 export type PipelineStage = 
   | 'idle'
-  | 'uploading'
-  | 'transcribing'
-  | 'extracting'
-  | 'deciding'
-  | 'complete'
+  | 'upload'
+  | 'speech'
+  | 'chunking'
+  | 'extraction'
+  | 'merge'
+  | 'decision'
+  | 'storage'
+  | 'search'
   | 'error';

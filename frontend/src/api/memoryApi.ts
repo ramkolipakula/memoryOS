@@ -2,6 +2,7 @@ import axios, { AxiosProgressEvent } from 'axios';
 import {
   TranscriptResponse,
   EventDto,
+  ExtractionResponse,
   ProcessResponse,
   SearchResponse,
 } from '../types';
@@ -37,8 +38,8 @@ export async function uploadAudio(
 /**
  * Extract structured events from a transcript.
  */
-export async function extractEvents(transcript: string): Promise<EventDto[]> {
-  const response = await api.post<EventDto[]>('/events/extract', { transcript });
+export async function extractEvents(transcript: string): Promise<ExtractionResponse> {
+  const response = await api.post<ExtractionResponse>('/events/extract', { transcript });
   return response.data;
 }
 

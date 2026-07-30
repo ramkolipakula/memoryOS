@@ -1,97 +1,62 @@
-import { EventDto } from '../types';
+import React from 'react';
 
-interface ExtractedEventsProps {
-  events: EventDto[] | null;
-  isLoading: boolean;
-  onProcessMemories: () => void;
-  processing: boolean;
-}
+export function ExtractedEvents({ events }: { events: any[] }) {
+    if (!events || events.length === 0) return null;
 
-const typeColors: Record<string, string> = {
-  'Assignment': 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  'Deadline': 'bg-forget-500/20 text-forget-400 border-forget-500/30',
-  'Meeting': 'bg-synapse-500/20 text-synapse-400 border-synapse-500/30',
-  'Reminder': 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  'Academic': 'bg-synapse-500/20 text-synapse-300 border-synapse-500/30',
-  'Work': 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  'Health': 'bg-remember-500/20 text-remember-400 border-remember-500/30',
-  'Shopping': 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  'Travel': 'bg-synapse-500/20 text-synapse-400 border-synapse-500/30',
-  'Personal': 'bg-neural-500/30 text-neural-300 border-neural-500/30',
-  'Casual Conversation': 'bg-neural-500/20 text-neural-400 border-neural-500/30',
-  'Other': 'bg-neural-500/20 text-neural-400 border-neural-500/30',
-};
-
-export default function ExtractedEvents({ events, isLoading, onProcessMemories, processing }: ExtractedEventsProps) {
-  if (isLoading) {
     return (
-      <div className="glass-card p-6 animate-fade-in" id="extracted-events-section">
-        <h2 className="section-title">
-          <span className="text-2xl">🔍</span>
-          Extracted Events
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-neural-700/40 rounded-xl p-5 border border-neural-600/20">
-              <div className="h-5 animate-shimmer rounded w-24 mb-3" />
-              <div className="h-4 animate-shimmer rounded w-3/4 mb-2" />
-              <div className="h-4 animate-shimmer rounded w-1/2" />
+        <div className="w-full mt-4">
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="font-headline-md text-headline-md text-on-surface">Extracted Events</h2>
+                <span className="font-mono-sm text-mono-sm text-tertiary px-2 py-1 bg-tertiary/10 rounded-full border border-tertiary/20">
+                    {events.length} Merged
+                </span>
             </div>
-          ))}
+            
+            <div className="flex flex-col gap-md pl-4 border-l border-outline-variant/50 ml-2">
+                <div className="relative">
+                    {events.map((event, idx) => (
+                        <div key={idx} className="mb-6 relative">
+                            <div className="absolute -left-[25px] mt-1 w-3 h-3 bg-tertiary rounded-full border-2 border-background"></div>
+                            <div className="flex flex-col gap-1">
+                                <div className="flex gap-2 items-center">
+                                    <span className="font-mono-sm text-[10px] text-tertiary uppercase">
+                                        EXTRACTED {event.chunkOrigin !== undefined ? `• CHUNK ${event.chunkOrigin}` : ''}
+                                    </span>
+                                    <span className="font-mono-sm text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded">
+                                        {event.type}
+                                    </span>
+                                </div>
+                                <span className="font-body-md text-on-surface font-medium mt-1">
+                                    {event.title || 'Untitled Event'}
+                                </span>
+                                <span className="font-body-sm text-xs text-on-surface-variant line-clamp-3 leading-relaxed mt-1">
+                                    {event.description}
+                                </span>
+                                
+                                <div className="flex items-center gap-4 mt-2">
+                                    {event.confidence !== undefined && (
+                                        <div className="flex items-center gap-1.5">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${event.confidence > 0.8 ? 'bg-tertiary' : 'bg-primary'}`}></div>
+                                            <span className="font-mono-sm text-[10px] text-on-surface-variant">
+                                                {(event.confidence * 100).toFixed(0)}% Conf
+                                            </span>
+                                        </div>
+                                    )}
+                                    
+                                    {event.estimatedImportance !== undefined && (
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="material-symbols-outlined text-[12px] text-primary">priority_high</span>
+                                            <span className="font-mono-sm text-[10px] text-on-surface-variant">
+                                                {event.estimatedImportance}/10 Priority
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
     );
-  }
-
-  if (!events || events.length === 0) return null;
-
-  return (
-    <div className="glass-card p-6 animate-slide-up" id="extracted-events-section">
-      <h2 className="section-title">
-        <span className="text-2xl">🔍</span>
-        Extracted Events
-        <span className="text-sm font-normal text-neural-400 ml-auto">{events.length} found</span>
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-        {events.map((event, idx) => {
-          const colorClass = typeColors[event.type] || typeColors['Other'];
-          return (
-            <div
-              key={idx}
-              className="bg-neural-700/30 rounded-xl p-5 border border-neural-600/20 hover:border-neural-400/30 transition-all animate-slide-up"
-              style={{ animationDelay: `${idx * 80}ms` }}
-            >
-              <span className={`type-badge border ${colorClass} mb-3 inline-block`}>
-                {event.type}
-              </span>
-              {event.title && (
-                <h3 className="text-neural-100 font-semibold text-sm mb-1">{event.title}</h3>
-              )}
-              <p className="text-neural-300 text-sm leading-relaxed">{event.description}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      <button
-        className="btn-primary w-full"
-        onClick={onProcessMemories}
-        disabled={processing}
-        id="process-memories-button"
-      >
-        {processing ? (
-          <span className="flex items-center justify-center gap-2">
-            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            Running Memory Decision Engine...
-          </span>
-        ) : (
-          '🧠 Process Through Memory Decision Engine'
-        )}
-      </button>
-    </div>
-  );
 }
