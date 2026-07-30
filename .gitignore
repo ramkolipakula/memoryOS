@@ -1,0 +1,67 @@
+# ----------------------------------------------------------------------
+# Backend (Java / Spring Boot / Maven)
+# ----------------------------------------------------------------------
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.nar
+backend/*.ear
+backend/*.zip
+backend/*.tar.gz
+backend/*.rar
+backend/hs_err_pid*
+backend/replay_pid*
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/build/
+backend/.gradle/
+
+# ----------------------------------------------------------------------
+# Frontend (Node / React / Vite)
+# ----------------------------------------------------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/.npm/
+frontend/coverage/
+
+# ----------------------------------------------------------------------
+# Environment Variables & Secrets (CRITICAL)
+# ----------------------------------------------------------------------
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.cert
+*.crt
+backend/.env
+frontend/.env
+
+# ----------------------------------------------------------------------
+# IDEs & Editors
+# ----------------------------------------------------------------------
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+
+# ----------------------------------------------------------------------
+# Logs & Temp Files
+# ----------------------------------------------------------------------
+*.log
+backend/*.log
+frontend/*.log
+temp/
+tmp/
+backend/uploads/
